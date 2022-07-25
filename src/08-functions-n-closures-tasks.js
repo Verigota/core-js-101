@@ -112,14 +112,14 @@ function memoize(func) {
 function retry(func, attempts) {
   let att = attempts;
   return () => {
-    att -= 1;
-    try {
-      func();
-    } catch (e) {
-      if (e instanceof TypeError && att) {
-        func();
+    do {
+      try {
+        return func();
+      } catch (e) {
+        att -= 1;
       }
-    }
+    } while (att);
+    return undefined;
   };
 }
 
